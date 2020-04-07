@@ -36,7 +36,8 @@ const Frame = styled.div`
     margin: 13px 0 10px 5px
 `
 const Cute = styled.img` 
-    height:2rem;   
+    height:1rem;  
+    margin-left:2px; 
 `
 const Image = styled.img` 
     width:110px
@@ -60,6 +61,7 @@ export default class MyCard extends Component {
         pokemon:'',
         type:'',
         isHovering: false,
+        happiness:''
      }
      
      componentDidMount(){
@@ -87,7 +89,26 @@ export default class MyCard extends Component {
              if(key===this.props.type){
                  this.setState({type:value})
              }
-         })      
+         })   
+         let damage = this.props.STR
+         let totalDamage = 0
+         if(damage){
+             damage = damage.map(dmg =>{
+                 damage = dmg.damage
+                 let sum = ''
+                 for(let i =0 ; i<damage.length;i++){
+                     if(damage.charAt(i)!== '+' && damage.charAt(i)!== '×'){
+                         sum = sum+damage.charAt(i)
+                     }
+                     totalDamage = 0
+                 }
+                 totalDamage += parseInt(sum) 
+             })
+         }
+         if(this.props.weak){
+             let happiness = ((this.props.hp/10)+(totalDamage/10)+10-(this.props.weak.length))/5
+             this.setState({happiness})
+         }   
      } 
      componentWillReceiveProps(nextProps){
         // console.log(nextProps.pokemon,'pokemon')
@@ -118,6 +139,25 @@ export default class MyCard extends Component {
         }else if(nextProps.hp === 'None'){
             this.setState({hp:0})
         }
+        let damage = nextProps.STR
+        let totalDamage = 0
+        if(damage){
+            damage = damage.map(dmg =>{
+                damage = dmg.damage
+                let sum = ''
+                for(let i =0 ; i<damage.length;i++){
+                    if(damage.charAt(i)!== '+' && damage.charAt(i)!== '×'){
+                        sum = sum+damage.charAt(i)
+                    }
+                    totalDamage = 0
+                }
+                totalDamage += parseInt(sum) 
+            })
+        }
+        if(nextProps.weak){
+            let happiness = ((nextProps.hp/10)+(totalDamage/10)+10-(nextProps.weak.length))/5
+            this.setState({happiness})
+        }
     }
     handleMouseHover = this.handleMouseHover.bind(this);
     handleMouseHover() {
@@ -132,6 +172,10 @@ export default class MyCard extends Component {
     
         
     render(){
+        let images  =[]
+        for (let i = 0; i < this.state.happiness; i++) {
+            images.push(<Cute alt= 'cute' src = {cute}/>)
+        }
        return (
         
             <div className="col-md-6 mb-4">
@@ -215,10 +259,7 @@ export default class MyCard extends Component {
                             </div>
                             <div className= 'row'>
                                 <div className={`col-12 col-md-9`}>
-                                    <Cute 
-                                        alt= 'cute' 
-                                        src = {cute}
-                                        />
+                                    {images}
                                 </div>
                             </div>
                             </div>

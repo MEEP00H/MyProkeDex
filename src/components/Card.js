@@ -39,7 +39,8 @@ const Cards = styled.div`
 `
 
 const Cute = styled.img` 
-    height:2rem;   
+    height:1rem;  
+    margin-left:2px; 
 `
 const Image = styled.img` 
     width:120px
@@ -71,6 +72,7 @@ export default class Card extends Component {
        pokemon:'',
        type:'',
        isHovering: false,
+       happiness:''
     }
     
     componentDidMount(){
@@ -105,7 +107,28 @@ export default class Card extends Component {
             if(key===this.props.type){
                 this.setState({type:value})
             }
-        })      
+        })
+        
+        let damage = this.props.STR
+        let totalDamage = 0
+        if(damage){
+            damage = damage.map(dmg =>{
+                damage = dmg.damage
+                let sum = ''
+                for(let i =0 ; i<damage.length;i++){
+                    if(damage.charAt(i)!== '+' && damage.charAt(i)!== '×'){
+                        sum = sum+damage.charAt(i)
+                    }
+                    totalDamage = 0
+                }
+                totalDamage += parseInt(sum) 
+            })
+        }
+        if(this.props.weak){
+            let happiness = ((this.props.hp/10)+(totalDamage/10)+10-(this.props.weak.length))/5
+            this.setState({happiness})
+        }
+           
     }
     componentWillReceiveProps(nextProps){
         
@@ -117,7 +140,6 @@ export default class Card extends Component {
             weak:nextProps.weak
 
         })
-        console.log(this.props,'pokemon')
         if(nextProps.STR){
             let statSTR  = nextProps.STR
             statSTR  = statSTR.length*50
@@ -138,7 +160,25 @@ export default class Card extends Component {
         }else if(nextProps.hp === 'None'){
             this.setState({hp:0})
         }
-        console.log(parseInt(this.state.hp),'poke',nextProps.name)
+        let damage = nextProps.STR
+        let totalDamage = 0
+        if(damage){
+            damage = damage.map(dmg =>{
+                damage = dmg.damage
+                let sum = ''
+                for(let i =0 ; i<damage.length;i++){
+                    if(damage.charAt(i)!== '+' && damage.charAt(i)!== '×'){
+                        sum = sum+damage.charAt(i)
+                    }
+                    totalDamage = 0
+                }
+                totalDamage += parseInt(sum) 
+            })
+        }
+        if(nextProps.weak){
+            let happiness = ((nextProps.hp/10)+(totalDamage/10)+10-(nextProps.weak.length))/5
+            this.setState({happiness})
+        }
         
     }
     handleMouseHover = this.handleMouseHover.bind(this);
@@ -155,27 +195,11 @@ export default class Card extends Component {
     
         
     render(){
-        
-    //  console.log(this.state.type)
-        
-        // let damage =cKey.attacks
-        
-        // let totalDamage = 0
-        // if(damage){
-        //     damage = damage.map(dmg =>{
-        //         damage = dmg.damage
-        //         let sum = ''
-        //         for(let i =0 ; i<damage.length;i++){
-        //             if(damage.charAt(i)!== '+' && damage.charAt(i)!== '×'){
-        //                 sum = sum+damage.charAt(i)
-        //             }
-        //         }
-        //         totalDamage += parseInt(sum) 
-        //     })
-        //     let happiness = ((hp/10)+(totalDamage/10)+10-weak)/5
-        //    console.log(happiness,'happy') 
-
-       
+        let images  =[]
+        for (let i = 0; i < this.state.happiness; i++) {
+            images.push(<Cute alt= 'cute' src = {cute}/>)
+        }
+        console.log(images)
         return (
             
             <div onClick ={(e)=> this.props.ADD(this.props.index)}>
@@ -257,10 +281,7 @@ export default class Card extends Component {
                             </div>
                             <div className= 'row mt-1'>
                                 <div className={`col-12 col-md-9`}>
-                                    <Cute 
-                                        alt= 'cute' 
-                                        src = {cute}
-                                        />
+                                    {images}
                                 </div>
                             </div>
                     </Detail>
