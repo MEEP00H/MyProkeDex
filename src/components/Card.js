@@ -57,8 +57,6 @@ const Detail = styled.div`
 const Close = styled.div`
     margin: -180px 0 0 310px
 `
-// const colorType = Object.keys(COLORS);
-// console.log(colorType)
 
 export default class Card extends Component {
 
@@ -83,7 +81,7 @@ export default class Card extends Component {
             let statSTR  = this.props.STR
             statSTR  = statSTR.length*50
             this.setState({STR:statSTR})
-            // console.log('props',this.props.STR)
+            
         }else{
             this.setState({STR:0}) 
         }
@@ -100,7 +98,7 @@ export default class Card extends Component {
         }
         
         
-        // console.log(this.props.index,'d')
+        
         const objectArray = Object.entries(COLORS);
 
         objectArray.forEach(([key, value]) => {
@@ -184,7 +182,6 @@ export default class Card extends Component {
     handleMouseHover = this.handleMouseHover.bind(this);
     handleMouseHover() {
         this.setState(this.toggleHoverState);
-        // console.log('hover',this.isHovering)
     }
 
     toggleHoverState(state) {
@@ -199,7 +196,10 @@ export default class Card extends Component {
         for (let i = 0; i < this.state.happiness; i++) {
             images.push(<Cute alt= 'cute' src = {cute}/>)
         }
-        console.log(images)
+        
+       
+
+
         return (
             
             <div onClick ={(e)=> this.props.ADD(this.props.index)}>

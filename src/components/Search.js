@@ -33,10 +33,7 @@ export default class Search extends Component {
     render() {
         return (
             <Searching>
-                <div class="input-group mb-3">
-                   
-                   
-
+                <div class="input-group mb-3">  
                     <div class="input-group mb-3">
                     <Input onChange= {this.onchange} placeholder="Find Pokemon" type="text" class="form-group col-md-6"/> 
                     <div class="input-group-append">
@@ -50,7 +47,7 @@ export default class Search extends Component {
                 {this.state.pokemon ? (
                     <div className ="row">
                         {this.state.pokemon.map((pokemon,index)=>{
-                            if(this.state.search !=='' && pokemon.name.indexOf(this.state.search)===-1){
+                            if(this.state.search !=='' && pokemon.name.toLowerCase().indexOf(this.state.search.toLowerCase())===-1){
                                 return null
                             }
                             return  <Card 

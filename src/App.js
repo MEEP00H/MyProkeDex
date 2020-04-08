@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
 import Pokedex from './containers/Pokedex'
-import 'bootstrap/dist/css/bootstrap.css';
 import Layout from './Layout/Layout'
 
 // const COLORS = {
